@@ -110,3 +110,55 @@ If Render build still fails:
 - Check the "Service Root Directory" field for accidental spaces.
 - Confirm the Dockerfile exists at repo path backend/Dockerfile.
 - If you prefer, create the service pointing root to repo root and set dockerfilePath to backend/Dockerfile (but avoid trailing spaces).
+
+Render UI — exact values to paste (copy/paste into Render when creating a new Web Service)
+
+1) Create a new Service → “Web Service”
+- Connect GitHub repo: select the repository for this project
+- Branch: main
+
+2) Basic settings
+- Name: student-resources-backend
+- Environment: Docker
+- Root Directory: .          <-- IMPORTANT: set exactly a single dot (repo root)
+- Dockerfile Path: backend/Dockerfile
+- Region: (your preferred region, e.g. oregon)
+- Plan: Free (or as needed)
+
+3) Build & Start (Docker builds image from Dockerfile automatically)
+- No build command required (Dockerfile handles build)
+- Port: 8080
+
+4) Health check (optional)
+- Health check path: /api/health
+- Protocol: HTTP
+
+5) Environment variables (set these in the Render UI — do NOT commit secrets into repo)
+- SPRING_DATASOURCE_URL = jdbc:mysql://<MYSQL_HOST>:3306/student_resources?useSSL=false&serverTimezone=UTC
+- SPRING_DATASOURCE_USERNAME = mohan
+- SPRING_DATASOURCE_PASSWORD = <your_db_password_here>
+- SPRING_DATASOURCE_DRIVER = com.mysql.cj.jdbc.Driver
+- SPRING_JPA_HBM2DDL = update
+- FILE_UPLOAD_DIR = /data/uploads
+- JAVA_OPTS = -Xmx512m
+
+6) Persistent storage (if you want uploads to persist)
+- If Render offers a persistent disk, set FILE_UPLOAD_DIR to the mounted path (e.g. /data/uploads) and make sure your Dockerfile or container writes there.
+- Alternatively configure S3 and update UploadController to use S3.
+
+7) After creating the service
+- Start deploy and watch logs in Render dashboard
+- Wait for logs to show:
+  - "Started StudentResourcesApplication" and "Tomcat started on port 8080"
+- Verify:
+  - curl.exe -i https://<your-backend-host>/api/health
+  - curl.exe -i https://<your-backend-host>/api/materials
+
+Troubleshooting tips
+- If you see an error about missing Dockerfile:
+  - Confirm the Dockerfile exists at repo relative path backend/Dockerfile (case-sensitive).
+  - In Render UI confirm "Root Directory" and "Dockerfile Path" fields (no trailing spaces).
+  - If using render.yaml, ensure it contains:
+    root: .
+    dockerfilePath: backend/Dockerfile
+- If build fails due to DB access, set DB env vars correctly and ensure the DB is reachable from Render (open the DB to Render IPs or use managed DB in the same provider).

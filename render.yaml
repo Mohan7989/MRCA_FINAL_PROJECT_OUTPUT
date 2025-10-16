@@ -1,9 +1,10 @@
+# Render service template — Dockerfile path is relative to repo root
 services:
   - type: web
     name: student-resources-backend
     env: docker
-    root: backend
-    dockerfilePath: Dockerfile
+    root: .
+    dockerfilePath: backend/Dockerfile
     repo: https://github.com/your-user/your-repo  # <-- REPLACE with your repo URL
     branch: main
     plan: free
@@ -23,5 +24,4 @@ services:
       - key: JAVA_OPTS
         value: -Xmx512m
 
-# Note: this file no longer creates a managed database. For MySQL, provide an external MySQL host
-# and set SPRING_DATASOURCE_URL / USER / PASSWORD in the Render service UI (do not commit real secrets).
+# NOTE: Do NOT commit real secrets. Replace placeholders above and/or set these env vars in the Render UI.
