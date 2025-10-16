@@ -85,3 +85,28 @@ Files changed
 ### [README.md](file:///d%3A/Backend-project/README.md)
 
 Update README to show correct PowerShell-friendly commands and quick diagnostics.
+
+Render deployment checklist (fix for "backend /Dockerfile" error)
+- In Render Console when creating the Web Service:
+  - Repository: connect your GitHub repo
+  - Branch: main
+  - Environment: Docker
+  - Service Root Directory: set to exactly "backend" (no leading/trailing spaces)
+  - Dockerfile Path: set to "Dockerfile" (case-sensitive; do NOT prefix with a slash)
+- If you use render.yaml, ensure the file has:
+  root: backend
+  dockerfilePath: Dockerfile
+  (the root + dockerfilePath avoid Render constructing "backend /Dockerfile" with a space)
+
+Environment variables (set these in Render → Service → Environment):
+- SPRING_DATASOURCE_URL = jdbc:mysql://<MYSQL_HOST>:3306/student_resources?useSSL=false&serverTimezone=UTC
+- SPRING_DATASOURCE_USERNAME = mohan
+- SPRING_DATASOURCE_PASSWORD = <your_db_password>
+- SPRING_JPA_HBM2DDL = update
+- FILE_UPLOAD_DIR = /data/uploads
+- JAVA_OPTS = -Xmx512m
+
+If Render build still fails:
+- Check the "Service Root Directory" field for accidental spaces.
+- Confirm the Dockerfile exists at repo path backend/Dockerfile.
+- If you prefer, create the service pointing root to repo root and set dockerfilePath to backend/Dockerfile (but avoid trailing spaces).
