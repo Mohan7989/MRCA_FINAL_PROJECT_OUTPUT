@@ -9,7 +9,7 @@ const slides = [
   { id: 3, image: '/assets/slider/slide5.jpg' },*/
   {
     id: 1,
-    image: 'https://i.postimg.cc/qBGgWffJ/retouch-2025020605564817.jpg',
+    image: 'https://i.postimg.cc/rmNWhKCz/Whats-App-Image-2025-10-14-at-06-09-44-38ec1f5a.jpg',
    // title: 'Quality Education',
    // subtitle: 'Access the best study materials and resources',
    // buttonText: 'Explore Materials',
@@ -17,7 +17,7 @@ const slides = [
   },
   {
     id: 2,
-    image: '/assets/slider/slide2.jpg',
+    image: 'https://i.postimg.cc/ZnDWg39h/Whats-App-Image-2025-10-14-at-07-12-08-a7a7576f.jpg',
    //title: 'Previous Question Papers',
     //subtitle: 'Prepare with past year exam papers',
     //buttonText: 'View Papers',
@@ -25,7 +25,7 @@ const slides = [
   },
   {
     id: 3,
-    image: '/assets/slider/slide3.jpg',
+    image: 'https://i.postimg.cc/FRr1HG3H/Whats-App-Image-2025-10-14-at-06-35-48-998a757c.jpg',
     //title: 'Study Notes',
     //subtitle: 'Comprehensive notes for every semester',
    // buttonText: 'Get Notes',
@@ -33,7 +33,7 @@ const slides = [
   },
   {
     id: 4,
-    image: '/assets/slider/slide4.jpg',
+    image: 'https://i.postimg.cc/65k3vBnH/Whats-App-Image-2025-10-14-at-07-12-05-6106bd53.jpg',
    // title: 'Internship Opportunities',
    // subtitle: 'Find the best internship resources',
    // buttonText: 'Explore Internships',
@@ -41,7 +41,7 @@ const slides = [
   },
   {
     id: 5,
-    image: '/assets/slider/slide5.jpg',
+    image: 'https://i.postimg.cc/J091ZQyg/Whats-App-Image-2025-10-14-at-07-12-12-c963fe4c.jpg',
    // title: 'Expert Guidance',
    // subtitle: 'Learn from experienced faculty and seniors',
    // buttonText: 'Learn More',
