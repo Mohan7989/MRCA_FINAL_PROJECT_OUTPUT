@@ -2,7 +2,7 @@ Render Web Service - exact values to enter (copy/paste)
 
 1) Repository
    - Git provider: GitHub
-   - Repository: Mohan7989/MRCA_FINAL_PROJECT_OUTPUT   (or your repo path)
+   - Repository: Mohan7989/MRCA_FINAL_PROJECT_OUTPUT
 
 2) Create -> New Web Service
    - Name: student-resources-backend
@@ -10,25 +10,27 @@ Render Web Service - exact values to enter (copy/paste)
    - Branch: main
    - Root Directory: backend        <-- exact, no leading/trailing spaces
    - Dockerfile Path: Dockerfile   <-- exact, case-sensitive
-   - Plan: free (or your chosen plan)
+   - Plan: free
    - Region: (choose nearest)
 
 3) Port & Health
    - Port: 8080
    - Health check path (optional): /api/health
-   - Health check protocol: HTTP
+   - Protocol: HTTP
 
-4) Environment variables (add these in the Service → Environment → Environment Variables)
-   - SPRING_DATASOURCE_URL = jdbc:mysql://<MYSQL_HOST>:3306/student_resources?useSSL=false&serverTimezone=UTC
-   - SPRING_DATASOURCE_USERNAME = mohan
-   - SPRING_DATASOURCE_PASSWORD = <your_db_password_here>
-   - SPRING_DATASOURCE_DRIVER = com.mysql.cj.jdbc.Driver
-   - SPRING_JPA_HBM2DDL = update
-   - FILE_UPLOAD_DIR = /data/uploads
-   - JAVA_OPTS = -Xmx512m
+4) IMPORTANT — Environment variables (set these in the Render UI; do NOT put placeholder DB URL in render.yaml)
+   - Add in Render UI (Service → Environment → Environment Variables):
+     - SPRING_DATASOURCE_URL = jdbc:mysql://<REAL_MYSQL_HOST>:3306/student_resources?useSSL=false&serverTimezone=UTC
+     - SPRING_DATASOURCE_USERNAME = <your_db_user>
+     - SPRING_DATASOURCE_PASSWORD = <your_db_password>
+     - SPRING_DATASOURCE_DRIVER = com.mysql.cj.jdbc.Driver
+     - SPRING_JPA_HBM2DDL = update
+     - FILE_UPLOAD_DIR = /data/uploads
+     - JAVA_OPTS = -Xmx512m
+
+   NOTE: If you do not set SPRING_DATASOURCE_URL, the application will use an in-memory H2 DB (useful for testing). For production set the real MySQL values in the Render UI.
 
 5) Notes / Troubleshooting
-   - Make sure the file backend/Dockerfile exists in the repo root exactly at that path.
-   - Do NOT put "backend/Dockerfile" into the Root Directory field — Root Directory must be a directory (backend).
-   - If using render.yaml, Render expects the same values; verify the file in repo root is the one we committed.
-   - If build fails, open Render Logs → check for "Cannot find Dockerfile" or database errors.
+   - Ensure backend/Dockerfile exists at that path in the repo.
+   - Use Render UI to add secrets; avoid placeholders in render.yaml.
+   - If you still see DB connection errors, paste the last 60 lines of logs and I'll advise next steps.
