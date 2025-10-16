@@ -3,9 +3,9 @@ services:
   - type: web
     name: student-resources-backend
     env: docker
-    root: .
-    dockerfilePath: backend/Dockerfile
-    repo: https://github.com/your-user/your-repo  # <-- REPLACE with your repo URL
+    root: backend
+    dockerfilePath: Dockerfile
+    repo: https://github.com/Mohan7989/MRCA_FINAL_PROJECT_OUTPUT  # replace if different
     branch: main
     plan: free
     envVars:
@@ -24,4 +24,4 @@ services:
       - key: JAVA_OPTS
         value: -Xmx512m
 
-# NOTE: Do NOT commit real secrets. Replace placeholders above and/or set these env vars in the Render UI.
+# NOTE: Do NOT commit real secrets. Replace placeholders above or set secrets in Render UI.
