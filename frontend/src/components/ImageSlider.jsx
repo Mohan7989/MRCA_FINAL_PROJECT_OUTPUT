@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 // Using placeholder images that actually exist
 const slides = [
-  {
-    id: 1,
-    image: '/assets/slider/slide1.jpg',
+  { id: 1, image: '/assets/slider/slide1.jpg' },
+  { id: 2, image: '/assets/slider/slide2.jpg' },
+  { id: 3, image: '/assets/slider/slide3.jpg' },
+   { id: 2, image: '/assets/slider/slide4.jpg' },
+  { id: 3, image: '/assets/slider/slide5.jpg' },
+ // {
+   /*// id: 1,
+   // image: '/assets/slider/slide1.jpg',
    // title: 'Quality Education',
     //subtitle: 'Access the best study materials and resources',
    // buttonText: 'Explore Materials',
@@ -41,7 +46,7 @@ const slides = [
    // subtitle: 'Learn from experienced faculty and seniors',
    // buttonText: 'Learn More',
    // link: '/semesters'
-  }
+  }*/
 ];
 
 function ImageSlider() {
