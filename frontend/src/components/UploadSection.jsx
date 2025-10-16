@@ -20,40 +20,49 @@ export default function UploadSection() {
   };
   const handleFile = (e) => setFile(e.target.files[0]);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    if (!file) return setMsg('Please select a file to upload.');
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('title', form.title);
-    fd.append('subject', form.subject);
-    fd.append('group', form.group);
-    fd.append('type', form.type);
-    fd.append('year', form.year);
-    fd.append('semester', form.semester);
-    fd.append('uploaderName', form.uploaderName);
-    setLoading(true);
-    try {
-      const res = await uploadMaterial(fd);
-      setMsg('✅ Upload submitted — pending admin approval.');
-      setForm({
-        title: '',
-        subject: '',
-        group: '',
-        type: 'pdf',
-        year: '2025',
-        semester: 'Sem-1',
-        uploaderName: ''
-      });
-      setFile(null);
-      document.getElementById('fileInput').value = '';
-    } catch (err) {
-      console.error(err);
-      setMsg('⚠️ Upload failed (backend may be offline). Data saved locally in demo mode.');
-    } finally {
-      setLoading(false);
+const submit = async (e) => {
+  e.preventDefault();
+  if (!file) return setMsg('Please select a file to upload.');
+  
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('title', form.title);
+  fd.append('subject', form.subject);
+  fd.append('group', form.group);
+  fd.append('type', form.type);
+  fd.append('year', form.year);
+  fd.append('semester', form.semester);
+  fd.append('uploaderName', form.uploaderName);
+  
+  setLoading(true);
+  setMsg(null);
+  
+  try {
+    const res = await uploadMaterial(fd);
+    setMsg('✅ Upload submitted — pending admin approval.');
+    
+    // Reset form
+    setForm({
+      title: '', subject: '', group: '', type: 'pdf',
+      year: '2025', semester: 'Sem-1', uploaderName: ''
+    });
+    setFile(null);
+    document.getElementById('fileInput').value = '';
+    
+  } catch (err) {
+    console.error('Upload error:', err);
+    
+    if (err.message.includes('offline')) {
+      setMsg('⚠️ Backend servers are currently offline. Please try again in few minutes.');
+    } else if (err.response) {
+      setMsg(`⚠️ Upload failed: ${err.response.data.message || 'Server error'}`);
+    } else {
+      setMsg('⚠️ Upload failed. Please check your connection and try again.');
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section id="upload" className="upload-section">

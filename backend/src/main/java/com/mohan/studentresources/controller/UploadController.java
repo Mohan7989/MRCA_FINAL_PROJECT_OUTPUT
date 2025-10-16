@@ -18,16 +18,16 @@ public class UploadController {
     @Autowired
     private MaterialRepository materialRepository;
 
-    @PostMapping
-    public Material uploadMaterial(@RequestParam("file") MultipartFile file,
-                                   @RequestParam String title,
-                                   @RequestParam String subject,
-                                   @RequestParam(required = false) String group,
-                                   @RequestParam String type,
-                                   @RequestParam String semester,
-                                   @RequestParam String year,
-                                   @RequestParam(required = false) String uploaderName) throws Exception {
-
+ @PostMapping
+public Material uploadMaterial(@RequestParam("file") MultipartFile file,
+                               @RequestParam String title,
+                               @RequestParam String subject,
+                               @RequestParam(required = false) String group,
+                               @RequestParam String type,
+                               @RequestParam String semester,
+                               @RequestParam String year,
+                               @RequestParam(required = false) String uploaderName,
+                               @RequestParam(required = false) String description) throws Exception { // ADD THIS  
         String fileUrl = storageService.storeFile(file);
 
         Material m = new Material();
@@ -40,6 +40,7 @@ public class UploadController {
         m.setUploaderName(uploaderName);
         m.setFileUrl(fileUrl);
         m.setApproved(false); // default: pending
+  m.setDescription(description); // ADD THIS
 
         return materialRepository.save(m);
     }
