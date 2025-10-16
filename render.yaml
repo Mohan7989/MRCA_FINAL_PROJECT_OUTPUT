@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: student-resources-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    repo: https://github.com/your-user/your-repo  # <-- REPLACE with your repo URL
+    branch: main
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://$DATABASE_HOST:$DATABASE_PORT/$DATABASE_NAME
+      - key: SPRING_DATASOURCE_USERNAME
+        fromService:
+          name: student-resources-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromService:
+          name: student-resources-db
+          property: password
+
+databases:
+  - name: student-resources-db
+    engine: postgres
+    plan: starter

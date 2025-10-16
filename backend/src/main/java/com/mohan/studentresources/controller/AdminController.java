@@ -15,12 +15,15 @@ public class AdminController {
     private MaterialRepository materialRepository;
 
 
-     @GetMapping("/pending")
+    @GetMapping("/pending")
     public List<Material> getPendingMaterials() {
-        // CHANGED from .findAll().stream().filter(...) to dedicated repository method
         return materialRepository.findByApprovedFalse();
     }
-   
+
+    @GetMapping("/approved")
+    public List<Material> getApprovedMaterials() {
+        return materialRepository.findByApprovedTrue();
+    }
 
     @PutMapping("/approve/{id}")
     public String approveMaterial(@PathVariable Long id) {
@@ -35,6 +38,12 @@ public class AdminController {
 
     @DeleteMapping("/reject/{id}")
     public String rejectMaterial(@PathVariable Long id) {
+        materialRepository.deleteById(id);
+        return "Deleted!";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteMaterial(@PathVariable Long id) {
         materialRepository.deleteById(id);
         return "Deleted!";
     }

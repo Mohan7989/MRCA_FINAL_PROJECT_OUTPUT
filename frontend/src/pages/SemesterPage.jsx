@@ -21,8 +21,10 @@ export default function SemesterPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // fetch initial items (recent)
-    loadMaterials(filters);
+    // ensure filters.semester reflects route slug, then load
+    const f = { ...filters, semester: slug || filters.semester };
+    setFilters(f);
+    loadMaterials(f);
     // eslint-disable-next-line
   }, [slug]);
 
@@ -81,7 +83,8 @@ export default function SemesterPage() {
     ).join(' ');
   }
 
-  const semesterTitle = getPageTitle(slug);
+  // compute user-friendly title from slug
+  const semesterTitle = getPageTitle(slug || filters.semester);
 
   return (
     <div className="semester-page">
@@ -96,8 +99,8 @@ export default function SemesterPage() {
       {/* Hero Section */}
       <div className="hero">
         <div className="hero-inner">
-          {/* ✅ CHANGED TO H1: This is the main page title for SEO */}
-          <h1>{filters.semester.replace('-', ' ').toUpperCase()}</h1>
+          {/* Use safe computed title */}
+          <h1>{semesterTitle.toUpperCase()}</h1>
           <p>Find materials, question papers and notes for this semester</p>
         </div>
       </div>

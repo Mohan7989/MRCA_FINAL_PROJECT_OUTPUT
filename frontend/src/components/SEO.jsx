@@ -1,23 +1,38 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
 
 export default function SEO({ title, description, name, type }) {
-  return (
-    <Helmet>
-      {/* Standard SEO Tags */}
-      <title>{title}</title>
-      <meta name='description' content={description} />
+	// set title + meta description at runtime (client-side)
+	useEffect(() => {
+		if (title) document.title = title;
+		if (description) {
+			let meta = document.querySelector('meta[name="description"]');
+			if (!meta) {
+				meta = document.createElement('meta');
+				meta.name = 'description';
+				document.head.appendChild(meta);
+			}
+			meta.content = description;
+		}
+		// optional open graph tags
+		if (name) {
+			let ogSite = document.querySelector('meta[property="og:site_name"]');
+			if (!ogSite) {
+				ogSite = document.createElement('meta');
+				ogSite.setAttribute('property', 'og:site_name');
+				document.head.appendChild(ogSite);
+			}
+			ogSite.content = name;
+		}
+		if (type) {
+			let ogType = document.querySelector('meta[property="og:type"]');
+			if (!ogType) {
+				ogType = document.createElement('meta');
+				ogType.setAttribute('property', 'og:type');
+				document.head.appendChild(ogType);
+			}
+			ogType.content = type;
+		}
+	}, [title, description, name, type]);
 
-      {/* OpenGraph Tags (for social media sharing) */}
-      <meta property='og:type' content={type} />
-      <meta property='og:title' content={title} />
-      <meta property='og:description' content={description} />
-
-      {/* Twitter Tags */}
-      <meta name='twitter:creator' content={name} />
-      <meta name='twitter:card' content={type === 'article' ? 'summary_large_image' : 'summary'} />
-      <meta name='twitter:title' content={title} />
-      <meta name='twitter:description' content={description} />
-    </Helmet>
-  );
+	return null;
 }

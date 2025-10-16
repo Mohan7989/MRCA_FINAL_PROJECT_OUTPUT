@@ -16,19 +16,32 @@ export async function uploadMaterial(formData) {
     });
     return res.data;
   } catch (err) {
-    throw err.response?.data || err;
+    // Improved error logging
+    console.error('uploadMaterial error:', {
+      message: err.message,
+      isAxiosError: err.isAxiosError,
+      response: err.response ? { status: err.response.status, data: err.response.data } : null,
+      config: err.config
+    });
+    // rethrow so UI can handle and display proper message
+    throw err;
   }
 }
 
 // Get materials with filters
 export async function fetchMaterials(filters = {}) {
-  // filters: { semester, subject, group, year, type, page, size }
   try {
     const res = await axiosInstance.get('/materials', { params: filters });
     return res.data;
   } catch (err) {
-    // fallback mock if backend not ready
-    return { items: [], total: 0 };
+    console.error('fetchMaterials error:', {
+      message: err.message,
+      isAxiosError: err.isAxiosError,
+      response: err.response ? { status: err.response.status, data: err.response.data } : null,
+      config: err.config
+    });
+    // bubble up error so caller can know backend is offline vs empty result
+    throw err;
   }
 }
 
