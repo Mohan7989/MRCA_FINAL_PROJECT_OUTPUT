@@ -131,7 +131,7 @@ $proc = Start-Process -FilePath "java" -ArgumentList $startArgs -WorkingDirector
 Write-Host "Started backend process (PID $($proc.Id)). Waiting for application to become healthy..."
 
 # Wait for health endpoint with retries
-$healthUrl = "http://localhost:8080/api/health"
+$healthUrl = "https://mrca-final-project-output-4.onrender.com/api/health"
 $maxAttempts = 60
 $attempt = 0
 $healthy = $false

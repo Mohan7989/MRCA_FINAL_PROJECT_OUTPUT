@@ -3,9 +3,9 @@
 $ErrorActionPreference = 'SilentlyContinue'
 
 Write-Host "1) Quick curl examples (copy/paste) for direct checks:"
-Write-Host "   curl -i http://localhost:8080/"
-Write-Host "   curl -i http://localhost:8080/api/health"
-Write-Host "   curl -i http://localhost:8080/api/materials"
+Write-Host "   curl -i https://mrca-final-project-output-4.onrender.com/"
+Write-Host "   curl -i https://mrca-final-project-output-4.onrender.com/api/health"
+Write-Host "   curl -i https://mrca-final-project-output-4.onrender.com/api/materials"
 Write-Host ""
 
 Write-Host "2) Is java running? (shows command line to identify the jar)"
@@ -34,7 +34,7 @@ Write-Host ""
 
 Write-Host "4) Try /api/health (attempt HTTP request)"
 try {
-  $resp = Invoke-RestMethod -Uri "http://localhost:8080/api/health" -TimeoutSec 5 -ErrorAction Stop
+  $resp = Invoke-RestMethod -Uri "https://mrca-final-project-output-4.onrender.com/api/health" -TimeoutSec 5 -ErrorAction Stop
   Write-Host "Health response:" -ForegroundColor Green
   $resp | Format-List
 } catch {

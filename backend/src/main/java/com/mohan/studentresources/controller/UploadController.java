@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/uploads")
-@CrossOrigin(origins = "http://localhost:3000")// allow frontend
+@CrossOrigin(origins = "https://mrca-final-project-output.vercel.app/")// allow frontend
 public class UploadController {
 
     @Autowired

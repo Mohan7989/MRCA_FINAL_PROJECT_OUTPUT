@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @RestController
 // Changed base mapping to avoid conflict with /api/materials provided by MaterialController
 @RequestMapping("/api/legacy")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://mrca-final-project-output.vercel.app/")
 public class MaterialsController {
 
     @Autowired

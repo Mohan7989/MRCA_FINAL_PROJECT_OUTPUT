@@ -13,13 +13,13 @@ PowerShell note about curl:
 - Use these safe commands in PowerShell:
 
   - Use `curl.exe` (the real curl shipped on Windows) to behave like Unix curl:
-    curl.exe -i http://localhost:8080/
-    curl.exe -i http://localhost:8080/api/health
-    curl.exe -i http://localhost:8080/api/materials
+    curl.exe -i https://mrca-final-project-output-4.onrender.com/
+    curl.exe -i https://mrca-final-project-output-4.onrender.com/api/health
+    curl.exe -i https://mrca-final-project-output-4.onrender.com/api/materials
 
   - Or use PowerShell native:
-    Invoke-RestMethod -Uri 'http://localhost:8080/api/health' -TimeoutSec 5
-    Invoke-WebRequest -Uri 'http://localhost:8080/' -UseBasicParsing
+    Invoke-RestMethod -Uri 'https://mrca-final-project-output-4.onrender.com/api/health' -TimeoutSec 5
+    Invoke-WebRequest -Uri 'https://mrca-final-project-output-4.onrender.com/' -UseBasicParsing
 
 If curl shows "Failed to connect"
 1. Confirm backend process & jar:
@@ -44,17 +44,17 @@ If curl shows "Failed to connect"
    - If the server fails shortly after start, paste the last 50 log lines here.
 
 5. Quick health test (after server running):
-   curl.exe -i http://localhost:8080/api/health
-   curl.exe -i http://localhost:8080/api/materials
-   curl.exe -i http://localhost:8080/api/admin/pending
+   curl.exe -i https://mrca-final-project-output-4.onrender.com/api/health
+   curl.exe -i https://mrca-final-project-output-4.onrender.com/api/materials
+   curl.exe -i https://mrca-final-project-output-4.onrender.com/api/admin/pending
 
 Smoke tests
 - Get materials:
-  curl http://localhost:8080/api/materials
+  curl https://mrca-final-project-output-4.onrender.com/api/materials
 - Admin pending:
-  curl http://localhost:8080/api/admin/pending
+  curl https://mrca-final-project-output-4.onrender.com/api/admin/pending
 - Upload test (replace path):
-  curl -v -X POST "http://localhost:8080/api/uploads" \
+  curl -v -X POST "https://mrca-final-project-output-4.onrender.com/api/uploads" \
     -F "file=@C:/path/to/sample.pdf" \
     -F "title=Test" -F "subject=Physics" -F "type=pdf" -F "semester=Sem-1" -F "year=2025" -F "uploaderName=Me"
 
