@@ -208,7 +208,23 @@ export default function UploadSection() {
                 <div className={`form-message ${msg.includes('✅') ? 'success' : 'error'}`}>
                   <i className={`bi ${msg.includes('✅') ? 'bi-check-circle' : 'bi-exclamation-triangle'}`}></i>
                   {msg}
-                </div>
+                   {/* ADD THIS NEW STATUS INFO */}
+    <div className="upload-status-info">
+      <p><strong>What happens next?</strong></p>
+      <ul>
+        <li>✅ Your upload is now <strong>pending admin approval</strong></li>
+        <li>📧 You can check approval status anytime using your name</li>
+        <li>⏳ Approval usually takes 24-48 hours</li>
+        <li>🌐 Once approved, your material will be visible to all students</li>
+      </ul>
+      <p>
+        <a href="#upload-status" className="status-check-link">
+          <i className="bi bi-clock-history"></i> Check your upload status
+        </a>
+      </p>
+    </div>
+  </div>
+              
               )}
             </form>
           </div>

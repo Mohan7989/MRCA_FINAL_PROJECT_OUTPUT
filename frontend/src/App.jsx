@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx'; // <-- FIXED: Added .jsx extension
-import SemesterPage from './pages/SemesterPage.jsx'; // <-- FIXED: Added .jsx extension
-import PrivacyPolicy from './pages/PrivacyPolicy.jsx'; // <-- FIXED: Added .jsx extension
-import TermsOfUse from './pages/TermsOfUse.jsx';     // <-- FIXED: Added .jsx extension
-import Header from './components/Header.jsx'; // <-- FIXED: Added .jsx extension
-import Footer from './components/Footer.jsx'; // <-- FIXED: Added .jsx extension
-import UploadSection from './components/UploadSection.jsx'; // <-- FIXED: Added .jsx extension
-import ImageSlider from './components/ImageSlider.jsx'; // <-- FIXED: Added .jsx extension
-import NotificationBar from './components/NotificationBar.jsx'; // <-- FIXED: Added .jsx extension
-import AdminDashboard from "./pages/AdminDashboard";
+import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
+import UploadSection from './components/UploadSection.jsx';
+import ImageSlider from './components/ImageSlider.jsx';
+import NotificationBar from './components/NotificationBar.jsx';
 
- function App() {
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home.jsx'));
+const SemesterPage = lazy(() => import('./pages/SemesterPage.jsx'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const TermsOfUse = lazy(() => import('./pages/TermsOfUse.jsx'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard.jsx'));
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="loading-spinner-container">
+    <div className="spinner"></div>
+    <p>Loading Student Resources...</p>
+  </div>
+);
+
+function App() {
   return (
     <div className="app">
       <Header />
       <ImageSlider />
       <NotificationBar />
       <main className="main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/semesters" element={<Home />} />
-          <Route path="/semester/:slug" element={<SemesterPage />} />
-          
-          {/* --- NEW LEGAL ROUTES FOR SEO/ADSENSE COMPLIANCE --- */}
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfUse />} />
-          
-          <Route path="*" element={<Home />} />
-          <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/semesters" element={<Home />} />
+            <Route path="/semester/:slug" element={<SemesterPage />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfUse />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Suspense>
         
         <div className="container mt-5">
           <UploadSection />
@@ -40,4 +48,5 @@ import AdminDashboard from "./pages/AdminDashboard";
     </div>
   );
 }
+
 export default App;

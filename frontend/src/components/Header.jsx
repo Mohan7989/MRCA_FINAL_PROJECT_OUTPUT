@@ -7,15 +7,23 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`);
-      setSearchQuery('');
-      setShowSearchPopup(false);
+      try {
+        // Redirect to semester page with search query
+        navigate(`/semester/sem-1?search=${encodeURIComponent(searchQuery)}`);
+        setSearchQuery('');
+        setShowSearchPopup(false);
+      } catch (err) {
+        console.error('Search failed:', err);
+        // Fallback to alert
+        alert(`Searching for: "${searchQuery}". Full search functionality coming soon!`);
+        setSearchQuery('');
+        setShowSearchPopup(false);
+      }
     }
   };
-
   const handleUploadClick = (e) => {
     e.preventDefault();
     if (location.pathname === '/') {

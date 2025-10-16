@@ -4,9 +4,11 @@ export default function AdminDashboard() {
   const [pending, setPending] = useState([]);
   const [approved, setApproved] = useState([]);
   const [loading, setLoading] = useState(true);
-  const backendUrl = "https://mrca-final-project-output-4.onrender.com/api/admin"; // Update after deployment
+  const [activeTab, setActiveTab] = useState('pending');
+  
+  const backendUrl = "https://mrca-final-project-output-4.onrender.com/api/admin";
 
-  // ✅ Load data on mount
+  // Load data on mount
   useEffect(() => {
     fetchAllData();
   }, []);
@@ -14,132 +16,209 @@ export default function AdminDashboard() {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const pendingRes = await fetch(`${backendUrl}/pending`);
-      const approvedRes = await fetch(`${backendUrl}/approved`);
+      const [pendingRes, approvedRes] = await Promise.all([
+        fetch(`${backendUrl}/pending`),
+        fetch(`${backendUrl}/approved`)
+      ]);
+      
       setPending(await pendingRes.json());
       setApproved(await approvedRes.json());
     } catch (err) {
       console.error("Error loading data:", err);
+      alert("Failed to load admin data. Check backend connection.");
     }
     setLoading(false);
   };
 
-  // ✅ Approve Material
+  // Approve Material
   const handleApprove = async (id) => {
     if (!window.confirm("Approve this material?")) return;
-    await fetch(`${backendUrl}/approve/${id}`, { method: "PUT" });
-    fetchAllData();
+    
+    try {
+      await fetch(`${backendUrl}/approve/${id}`, { method: "PUT" });
+      fetchAllData(); // Refresh data
+      alert("Material approved successfully!");
+    } catch (err) {
+      alert("Failed to approve material.");
+    }
   };
 
-  // ✅ Delete Material
+  // Delete Material
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this material?")) return;
-    await fetch(`${backendUrl}/delete/${id}`, { method: "DELETE" });
-    fetchAllData();
+    if (!window.confirm("Delete this material permanently?")) return;
+    
+    try {
+      await fetch(`${backendUrl}/delete/${id}`, { method: "DELETE" });
+      fetchAllData(); // Refresh data
+      alert("Material deleted successfully!");
+    } catch (err) {
+      alert("Failed to delete material.");
+    }
   };
 
-  if (loading) return <div className="text-center p-5">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="admin-loading">
+        <div className="spinner"></div>
+        <p>Loading Admin Dashboard...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-6 text-blue-700">
-        Admin Dashboard – Manage Materials
-      </h1>
+    <div className="admin-dashboard">
+      <div className="container">
+        <header className="admin-header">
+          <h1>📊 Admin Dashboard</h1>
+          <p>Manage study materials and approvals</p>
+        </header>
 
-      {/* Pending Materials */}
-      <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-3 text-yellow-700">Pending Materials</h2>
-        {pending.length === 0 ? (
-          <p>No pending materials 🎉</p>
-        ) : (
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="p-2 border">Title</th>
-                <th className="p-2 border">Subject</th>
-                <th className="p-2 border">Year</th>
-                <th className="p-2 border">Semester</th>
-                <th className="p-2 border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pending.map((m) => (
-                <tr key={m.id}>
-                  <td className="p-2 border">{m.title}</td>
-                  <td className="p-2 border">{m.subject}</td>
-                  <td className="p-2 border">{m.year}</td>
-                  <td className="p-2 border">{m.semester}</td>
-                  <td className="p-2 border">
-                    <button
-                      onClick={() => handleApprove(m.id)}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleDelete(m.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Tab Navigation */}
+        <div className="admin-tabs">
+          <button 
+            className={`tab-btn ${activeTab === 'pending' ? 'active' : ''}`}
+            onClick={() => setActiveTab('pending')}
+          >
+            ⏳ Pending Materials ({pending.length})
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'approved' ? 'active' : ''}`}
+            onClick={() => setActiveTab('approved')}
+          >
+            ✅ Approved Materials ({approved.length})
+          </button>
+        </div>
+
+        {/* Pending Materials Tab */}
+        {activeTab === 'pending' && (
+          <section className="admin-section">
+            <h2>⏳ Pending Approval</h2>
+            {pending.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🎉</div>
+                <h3>No Pending Materials</h3>
+                <p>All materials have been reviewed and approved!</p>
+              </div>
+            ) : (
+              <div className="materials-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Subject</th>
+                      <th>Semester</th>
+                      <th>Year</th>
+                      <th>Uploader</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pending.map((material) => (
+                      <tr key={material.id}>
+                        <td className="material-title">{material.title}</td>
+                        <td>{material.subject}</td>
+                        <td>{material.semester}</td>
+                        <td>{material.uploadYear}</td>
+                        <td>{material.uploaderName || 'Anonymous'}</td>
+                        <td className="action-buttons">
+                          <button
+                            onClick={() => handleApprove(material.id)}
+                            className="btn-approve"
+                            title="Approve Material"
+                          >
+                            ✅ Approve
+                          </button>
+                          <button
+                            onClick={() => handleDelete(material.id)}
+                            className="btn-delete"
+                            title="Reject Material"
+                          >
+                            ❌ Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         )}
-      </section>
 
-      {/* Approved Materials */}
-      <section>
-        <h2 className="text-xl font-semibold mb-3 text-green-700">Approved Materials</h2>
-        {approved.length === 0 ? (
-          <p>No approved materials yet.</p>
-        ) : (
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="p-2 border">Title</th>
-                <th className="p-2 border">Subject</th>
-                <th className="p-2 border">Year</th>
-                <th className="p-2 border">Semester</th>
-                <th className="p-2 border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {approved.map((m) => (
-                <tr key={m.id}>
-                  <td className="p-2 border">{m.title}</td>
-                  <td className="p-2 border">{m.subject}</td>
-                  <td className="p-2 border">{m.year}</td>
-                  <td className="p-2 border">{m.semester}</td>
-                  <td className="p-2 border">
-                    <a
-                      href={m.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded mr-2"
-                    >
-                      View
-                    </a>
-                    <button
-                      onClick={() => handleDelete(m.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Approved Materials Tab */}
+        {activeTab === 'approved' && (
+          <section className="admin-section">
+            <h2>✅ Approved Materials</h2>
+            {approved.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">📚</div>
+                <h3>No Approved Materials Yet</h3>
+                <p>Approve some materials to see them here.</p>
+              </div>
+            ) : (
+              <div className="materials-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Subject</th>
+                      <th>Semester</th>
+                      <th>Year</th>
+                      <th>Uploader</th>
+                      <th>File</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {approved.map((material) => (
+                      <tr key={material.id}>
+                        <td className="material-title">{material.title}</td>
+                        <td>{material.subject}</td>
+                        <td>{material.semester}</td>
+                        <td>{material.uploadYear}</td>
+                        <td>{material.uploaderName || 'Anonymous'}</td>
+                        <td>
+                          {material.fileUrl && (
+                            <a 
+                              href={`https://mrca-final-project-output-4.onrender.com${material.fileUrl}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="file-link"
+                            >
+                              📄 View File
+                            </a>
+                          )}
+                        </td>
+                        <td className="action-buttons">
+                          <button
+                            onClick={() => handleDelete(material.id)}
+                            className="btn-delete"
+                            title="Remove Material"
+                          >
+                            🗑️ Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         )}
-      </section>
 
-      {/* Footer */}
-      <footer className="text-center text-gray-600 mt-10">
-        Built by Mohan © 2025 All Rights Reserved
-      </footer>
+        {/* Refresh Button */}
+        <div className="admin-actions">
+          <button onClick={fetchAllData} className="btn-refresh">
+            🔄 Refresh Data
+          </button>
+        </div>
+
+        {/* Footer */}
+        <footer className="admin-footer">
+          <p>Built by Mohan © 2025 - MR College Autonomous</p>
+        </footer>
+      </div>
     </div>
   );
 }
