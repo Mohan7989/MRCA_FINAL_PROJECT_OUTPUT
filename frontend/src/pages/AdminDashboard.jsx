@@ -4,7 +4,7 @@ export default function AdminDashboard() {
   const [pending, setPending] = useState([]);
   const [approved, setApproved] = useState([]);
   const [loading, setLoading] = useState(true);
-  const backendUrl = "http://localhost:8080/api/admin"; // Update after deployment
+  const backendUrl = "https://mrca-final-project-output-4.onrender.com/api/admin"; // Update after deployment
 
   // ✅ Load data on mount
   useEffect(() => {

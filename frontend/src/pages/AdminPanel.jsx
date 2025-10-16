@@ -4,18 +4,18 @@ export default function AdminPanel() {
   const [materials, setMaterials] = useState([]);
 
   const fetchPending = async () => {
-    const res = await fetch("http://localhost:8080/api/admin/pending");
+    const res = await fetch("https://mrca-final-project-output-4.onrender.com/api/admin/pending");
     const data = await res.json();
     setMaterials(data);
   };
 
   const approve = async (id) => {
-    await fetch(`http://localhost:8080/api/admin/approve/${id}`, { method: "PUT" });
+    await fetch(`https://mrca-final-project-output-4.onrender.com/api/admin/approve/${id}`, { method: "PUT" });
     fetchPending();
   };
 
   const reject = async (id) => {
-    await fetch(`http://localhost:8080/api/admin/reject/${id}`, { method: "DELETE" });
+    await fetch(`https://mrca-final-project-output-4.onrender.com/api/admin/reject/${id}`, { method: "DELETE" });
     fetchPending();
   };
 

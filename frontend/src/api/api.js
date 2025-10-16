@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL - change to your backend URL when ready.
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://mrca-final-project-output-4.onrender.com/api';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
