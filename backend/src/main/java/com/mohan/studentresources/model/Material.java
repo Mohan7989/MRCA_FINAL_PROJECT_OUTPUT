@@ -25,7 +25,7 @@ public class Material {
     private String uploaderName;
     private String fileUrl; // path to file in static/uploads
     private boolean approved = false; // admin approval
-    
+      
     // ADD THIS MISSING FIELD
     @Column(columnDefinition = "TEXT")
     private String description;
